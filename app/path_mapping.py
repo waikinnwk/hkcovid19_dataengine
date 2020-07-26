@@ -27,7 +27,7 @@ def get_symptomatic_result():
     symptomatic_result = get_case_by_symptomatic_from_db()
     return jsonify(symptomatic_result)
 
-@app.route('/getLatestSummary', methods=['POST'])
+@app.route('/getLatestSummary')
 def get_latest_summary():
     return jsonify(get_latest_summary_from_db())
 
