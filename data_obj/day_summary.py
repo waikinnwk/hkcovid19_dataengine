@@ -2,7 +2,7 @@ from db import db
 
 class DaySummary(db.Model):
     __tablename__ = 'DaySummary'
-    as_of_date = db.Column(db.String(10), primary_key=True)
+    as_of_date = db.Column(db.DateTime, primary_key=True)
     no_of_confirmed_cases = db.Column(db.Integer)
     no_of_ruled_out_cases = db.Column(db.Integer)
     no_of_cases_still_hospitalised_for_investigation = db.Column(db.Integer)
@@ -15,3 +15,4 @@ class DaySummary(db.Model):
 
     def __repr__(self):
         return '<Case Summary %exir>' %self.as_of_date
+

@@ -34,9 +34,14 @@ def refresh_data():
                 print('Error')    
     day_summarys = get_day_summary()
     for day_summary in day_summarys:
-        day_summary_from_db = DaySummary.query.get(day_summary[as_of_date_key])
+        report_date_str = ""
+        for c in day_summary[as_of_date_key]:
+            if c =='/' or c.isnumeric():
+                report_date_str += c
+        day_summary_from_db = DaySummary.query.get(datetime.strptime(report_date_str, data_format).replace(hour=0, minute=0, second=0, microsecond=0))
         if(day_summary_from_db is None):
-            new_day_summary = DaySummary(as_of_date=day_summary[as_of_date_key],
+
+            new_day_summary = DaySummary(as_of_date=datetime.strptime(report_date_str, data_format).replace(hour=0, minute=0, second=0, microsecond=0),
                 no_of_confirmed_cases=day_summary[no_of_confirmed_cases_key],
                 no_of_ruled_out_cases = day_summary[no_of_ruled_out_cases_key],
                 no_of_cases_still_hospitalised_for_investigation = day_summary[no_of_cases_still_hospitalised_for_investigation_key],

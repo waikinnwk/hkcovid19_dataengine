@@ -1,4 +1,7 @@
+import json
 from data_obj.case import *
+from data_obj.day_summary import *
+from datetime import datetime, timedelta
 
 
 def get_case_group_by_age_from_db():
@@ -79,4 +82,39 @@ def get_case_by_symptomatic_from_db():
         "symptomatic_case" : symptomatic_case     
     }
 
+    return result
+
+def get_latest_summary_from_db(): 
+    daysummary = DaySummary.query.order_by(DaySummary.as_of_date.desc()).first()
+    result = {}
+    result["as_of_date"] = daysummary.as_of_date.strftime("%d/%m/%Y")
+    result["no_of_confirmed_cases"] = daysummary.no_of_confirmed_cases
+    result["no_of_ruled_out_cases"] = daysummary.no_of_ruled_out_cases
+    result["no_of_cases_still_hospitalised_for_investigation"] = daysummary.no_of_cases_still_hospitalised_for_investigation
+    result["no_of_cases_fulfilling_the_reporting_criteria"] = daysummary.no_of_cases_fulfilling_the_reporting_criteria
+    result["no_of_death_cases"] = daysummary.no_of_death_cases
+    result["no_of_discharge_cases"] = daysummary.no_of_discharge_cases
+    result["no_of_probable_cases"] = daysummary.no_of_probable_cases
+    result["no_of_hospitalised_cases_in_critical_condition"] = daysummary.no_of_hospitalised_cases_in_critical_condition
+    return result
+
+
+def get_summary_for_past_14_from_db(): 
+    d_14 = datetime.today() - timedelta(days=14)
+    d_14 = d_14.replace(hour=0, minute=0, second=0, microsecond=0)
+    today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+    daysummarys = DaySummary.query.filter(DaySummary.as_of_date <= today).filter(DaySummary.as_of_date >= d_14).order_by(DaySummary.as_of_date)
+    result = []
+    for daysummary in daysummarys:
+        o = {}
+        o["as_of_date"] = daysummary.as_of_date.strftime("%d/%m/%Y")
+        o["no_of_confirmed_cases"] = daysummary.no_of_confirmed_cases
+        o["no_of_ruled_out_cases"] = daysummary.no_of_ruled_out_cases
+        o["no_of_cases_still_hospitalised_for_investigation"] = daysummary.no_of_cases_still_hospitalised_for_investigation
+        o["no_of_cases_fulfilling_the_reporting_criteria"] = daysummary.no_of_cases_fulfilling_the_reporting_criteria
+        o["no_of_death_cases"] = daysummary.no_of_death_cases
+        o["no_of_discharge_cases"] = daysummary.no_of_discharge_cases
+        o["no_of_probable_cases"] = daysummary.no_of_probable_cases
+        o["no_of_hospitalised_cases_in_critical_condition"] = daysummary.no_of_hospitalised_cases_in_critical_condition
+        result.append(o) 
     return result
