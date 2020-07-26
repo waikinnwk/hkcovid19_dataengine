@@ -11,13 +11,13 @@ def refresh_data_from_gov():
     return jsonify(result)
 
 
-@app.route('/getCaseNoByMonth')
+@app.route('/getCaseNoByMonth', methods=['POST'])
 def caseno_by_month():
     result = get_caseno_by_month_from_db()
     return jsonify(result)
 
 
-@app.route('/getCaseGroupByAge')
+@app.route('/getCaseGroupByAge', methods=['POST'])
 def get_case_group_by_age():
     return jsonify(get_case_group_by_age_from_db())
 
