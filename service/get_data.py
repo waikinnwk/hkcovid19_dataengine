@@ -2,7 +2,8 @@ import json
 from data_obj.case import *
 from data_obj.day_summary import *
 from datetime import datetime, timedelta
-
+from db import db
+from sqlalchemy import *
 
 def get_case_group_by_age_from_db():
     cases = Case.query.order_by(Case.case_no).all()
@@ -85,6 +86,7 @@ def get_case_by_symptomatic_from_db():
     return result
 
 def get_latest_summary_from_db(): 
+
     daysummary = DaySummary.query.order_by(DaySummary.as_of_date.desc()).first()
     result = {}
     result["as_of_date"] = daysummary.as_of_date.strftime("%d/%m/%Y")
@@ -96,6 +98,14 @@ def get_latest_summary_from_db():
     result["no_of_discharge_cases"] = daysummary.no_of_discharge_cases
     result["no_of_probable_cases"] = daysummary.no_of_probable_cases
     result["no_of_hospitalised_cases_in_critical_condition"] = daysummary.no_of_hospitalised_cases_in_critical_condition
+
+    d_1 = daysummary.as_of_date - timedelta(days=1)
+    records = db.session.query(Case.report_date, func.count(Case.report_date).label('count')).filter(Case.report_date.between(d_1, daysummary.as_of_date)).group_by(Case.report_date).order_by('count')
+    for record in records:
+        if d_1 == record.report_date:
+            result["no_of_confirmed_cases_b1"] = record.count
+        elif daysummary.as_of_date == record.report_date:
+            result["no_of_confirmed_cases_today"] = record.count
     return result
 
 
