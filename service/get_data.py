@@ -102,13 +102,19 @@ def get_latest_summary_from_db():
     d_14 = daysummary.as_of_date - timedelta(days=14)
     records = db.session.query(Case.report_date, func.count(Case.report_date).label('count')).filter(Case.report_date.between(d_14, daysummary.as_of_date)).group_by(Case.report_date).order_by(Case.report_date.desc())
     i = 0
+    max_case_no = 0
     for record in records:
         if i == 0:
             result["no_of_confirmed_cases_today"] = record.count
         else:
             result["no_of_confirmed_cases_b"+str(i)] = record.count
         i+=1
-            
+        if(record.count > max_case_no)
+            max_case_no = record.count
+
+    result["max_case_no"] = max_case_no
+        
+
     return result
 
 

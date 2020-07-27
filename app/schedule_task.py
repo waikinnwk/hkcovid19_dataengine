@@ -1,13 +1,19 @@
 import atexit
 
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.blocking import BlockingScheduler
 from service.save_data_to_db import refresh_data
 
 
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=refresh_data, trigger="interval", hours=2)
-scheduler.start()
+
+sched = BlockingScheduler()
+
+@sched.scheduled_job('interval', minutes=10)
+def timed_job():
+    print('Refresh data from GOV Start')
+    refresh_data()
+    print('Refresh data from GOV End')
+
 
 # Shut down the scheduler when exiting the app
 atexit.register(lambda: scheduler.shutdown())
