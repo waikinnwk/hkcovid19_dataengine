@@ -109,7 +109,7 @@ def get_latest_summary_from_db():
         else:
             result["no_of_confirmed_cases_b"+str(i)] = record.count
         i+=1
-        if(record.count > max_case_no)
+        if(record.count > max_case_no):
             max_case_no = record.count
 
     result["max_case_no"] = max_case_no
