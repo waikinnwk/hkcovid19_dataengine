@@ -1,6 +1,7 @@
 import json
 from data_obj.case import *
 from data_obj.day_summary import *
+from data_obj.related_building import *
 from datetime import datetime, timedelta
 from db import db
 from sqlalchemy import *
@@ -137,3 +138,31 @@ def get_summary_for_past_14_from_db():
         o["no_of_hospitalised_cases_in_critical_condition"] = daysummary.no_of_hospitalised_cases_in_critical_condition
         result.append(o) 
     return result
+
+
+def get_latest_related_building_from_db(): 
+    today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+    related_buildings = RelatedBuilding.query.filter(RelatedBuilding.as_of_date == today).order_by(RelatedBuilding.district)
+    result = []
+    for related_building in related_buildings:
+        o = {}
+        o["as_of_date"] = related_building.as_of_date.strftime("%d/%m/%Y")
+        o["district"] = related_building.district
+        o["building_name"] = related_building.building_name
+        o["last_date_of_residence_of_the_case"] = related_building.last_date_of_residence_of_the_case
+        o["related_case"] = related_building.related_case
+        o["no_of_case"] = related_building.no_of_case
+        result.append(o) 
+    return result
+
+def get_latest_district_data_from_db():
+    today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+    districts = db.session.query(RelatedBuilding.district, func.sum(RelatedBuilding.no_of_case).label('no_of_case')).filter(RelatedBuilding.as_of_date == today).group_by(RelatedBuilding.district).order_by(RelatedBuilding.district)   
+    result = []
+    for district in districts:
+        o = {}
+        o["district"] = district.district
+        o["no_of_case"] = district.no_of_case
+        result.append(o) 
+    return result
+

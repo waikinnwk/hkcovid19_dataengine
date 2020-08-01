@@ -58,12 +58,39 @@ def refresh_data():
             except:
                 print('Error')   
     
-    today = time.replace(hour=0, minute=0, second=0, microsecond=0)
+    today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
     related_buildings = get_related_buildings()
     for related_building in related_buildings:
-        related_building_from_db = RelatedBuilding.query.get(today,related_buildings[building_name_key])
+        related_building_from_db = RelatedBuilding.query.filter(RelatedBuilding.as_of_date == today).filter(RelatedBuilding.building_name == related_building[building_name_key]).first()
+        related_case = related_building[related_case_key]
+        no_of_case = 0
+        if(len(related_case) > 0):
+            no_of_case = len(related_case.split(","))
         if(related_building_from_db is None):
-            print('No B found') 
+            new_related_building = RelatedBuilding(as_of_date=today,
+                district=related_building[district_key],
+                building_name = related_building[building_name_key],
+                last_date_of_residence_of_the_case = related_building[last_date_of_residence_of_the_case_key],
+                related_case = related_building[related_case_key],
+                no_of_case = no_of_case
+            )
+            try:
+                db.session.add(new_related_building)
+                db.session.commit()
+            except:
+                print('Error')   
+        else:
+            if related_building_from_db.last_date_of_residence_of_the_case != related_building[last_date_of_residence_of_the_case_key] and related_building_from_db.related_case != related_building[related_case_key]:
+                related_building_from_db.last_date_of_residence_of_the_case = related_building[last_date_of_residence_of_the_case_key]
+                related_building_from_db.related_case = related_building[related_case_key]
+                related_building_from_db.no_of_case = no_of_case
+                try:
+                    db.session.add(new_related_building)
+                    db.session.commit()
+                except:
+                    print('Error')   
+
+
     print("refresh_data end :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
 
 

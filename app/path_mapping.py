@@ -35,3 +35,12 @@ def get_latest_summary():
 @app.route('/getSummaryForPast14', methods=['POST'])
 def get_summary_for_past_14():
     return jsonify(get_summary_for_past_14_from_db())
+
+@app.route('/getRelatedBuildings', methods=['POST'])
+def get_related_budilings():
+    return jsonify(get_latest_related_building_from_db())
+
+@app.route('/getDistrictData', methods=['POST'])
+def get_district_data():
+    return jsonify(get_latest_district_data_from_db())
+    
