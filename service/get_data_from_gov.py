@@ -15,3 +15,9 @@ def get_day_summary():
     response = requests.get(url_for_day_summary,data = data_obj)
     json_data = response.json()
     return json_data    
+
+def get_related_buildings():
+    data_obj = {}
+    response = requests.get(url_for_related_building,data = data_obj)
+    json_data = response.json()
+    return json_data  

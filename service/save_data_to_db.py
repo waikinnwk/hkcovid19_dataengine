@@ -32,6 +32,7 @@ def refresh_data():
                 db.session.commit()
             except:
                 print('Error')    
+    
     day_summarys = get_day_summary()
     for day_summary in day_summarys:
         report_date_str = ""
@@ -57,6 +58,12 @@ def refresh_data():
             except:
                 print('Error')   
     
+    today = time.replace(hour=0, minute=0, second=0, microsecond=0)
+    related_buildings = get_related_buildings()
+    for related_building in related_buildings:
+        related_building_from_db = RelatedBuilding.query.get(today,related_buildings[building_name_key])
+        if(related_building_from_db is None):
+            print('No B found') 
     print("refresh_data end :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
 
 
