@@ -11,7 +11,7 @@ else:
 from flask import url_for, request
 import requests
 
-url = "http://localhost:"+port+"/updateBuildingGEO"
+url = "http://localhost:"+str(port)+"/updateBuildingGEO"
 
 data_obj = {}
 response = requests.get(url,data = data_obj)
