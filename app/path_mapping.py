@@ -1,6 +1,6 @@
 from flask import jsonify
 from app import app
-from service.save_data_to_db import refresh_data
+from service.save_data_to_db import refresh_data,update_building_geo
 from service.get_data import *
 
 
@@ -9,6 +9,13 @@ def refresh_data_from_gov():
     refresh_data()
     result = {"result": "OK","data": ""}
     return jsonify(result)
+
+@app.route('/updateBuildingGEO')
+def update_buidling_geo_p():    
+    update_building_geo()
+    result = {"result": "OK","data": ""}
+    return jsonify(result)
+
 
 
 @app.route('/getCaseNoByMonth', methods=['POST'])
