@@ -63,4 +63,8 @@ def get_district_data():
 @app.route('/getBuildingGeoData')
 def get_building_geo_data():
     return jsonify(get_building_geo_data_from_db())
+
+@app.route('/getBuildingWithoutGeoData')
+def get_building_without_geo_data():
+    return jsonify(get_building_without_geo_data_from_db())
     

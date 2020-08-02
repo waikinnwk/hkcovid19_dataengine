@@ -189,3 +189,23 @@ def get_building_geo_data_from_db():
         o["lon"] = geo_data.lon
         result.append(o) 
     return result
+
+def get_building_without_geo_data_from_db():
+    related_buildings = RelatedBuilding.query.filter(
+        ~BuildingGeoInfo.query
+        .filter(BuildingGeoInfo.district == RelatedBuilding.district)
+        .filter(BuildingGeoInfo.building_name == func.trim(func.replace(func.upper(RelatedBuilding.building_name),'(NON-RESIDENTIAL)','')))
+        .exists()
+    ).order_by(RelatedBuilding.district).all()
+    result = []
+    dis_building_dic = {}
+    for related_building in related_buildings:
+         trim_building_name = convert_building_name_to_geo(related_building.building_name)
+         key = related_building.district+"_"+trim_building_name
+         if key not in dis_building_dic.keys():
+            dis_building_dic[key] = "Y"
+            o = {}
+            o["district"] = related_building.district
+            o["building_name"] = trim_building_name
+            result.append(o) 
+    return result

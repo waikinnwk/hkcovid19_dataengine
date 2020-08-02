@@ -1,13 +1,8 @@
-from app import db
-
-from data_obj.building_geo import *
-from data_obj.related_building import *
+from flask import url_for, request
 import requests
 import ssl
 from datetime import datetime
 import time
-from util.utils import convert_building_name_to_geo
-from sqlalchemy import *
 
 
 def update_building_geo_sc():
@@ -19,21 +14,19 @@ def update_building_geo_sc():
     "X-Requested-With": "XMLHttpRequest"
     }    
     data_obj = []
-    related_buildings = RelatedBuilding.query.filter(
-        ~BuildingGeoInfo.query
-        .filter(BuildingGeoInfo.district == RelatedBuilding.district)
-        .filter(BuildingGeoInfo.building_name == func.trim(func.replace(func.upper(RelatedBuilding.building_name),'(NON-RESIDENTIAL)','')))
-        .exists()
-    ).order_by(RelatedBuilding.district).all()
+    response_building = requests.get("https://kinhkcovid19dataengine.herokuapp.com/getBuildingWithoutGeoData",data = data_obj, headers=header)
+    response_building_json_data = response_building.json()
     inserted = 0
-    print("No Geo Data Building : " +str(len(related_buildings)))
-    for related_building in related_buildings:
+    print("No Geo Data Building : " +str(len(response_building_json_data)))
+    for building_data in response_building_json_data:
+        district = building_data["district"]
+        building_name = building_data["building_name"]
         try:
-            response = requests.get(url_GetXY_Pre+trim_building_name+","+related_building.district+url_GetXY_Post,data = data_obj, headers=header)
+            response = requests.get(url_GetXY_Pre+building_name+","+district+url_GetXY_Post,data = data_obj, headers=header)
             json_data = response.json()
             for data in json_data:
-                new_data_obj = {"district":related_building.district,
-                    "building_name":trim_building_name,
+                new_data_obj = {"district":district,
+                    "building_name":building_name,
                     "lat": data["lat"],
                     "lon": data["lon"]}
                 response = requests.post("https://kinhkcovid19dataengine.herokuapp.com/saveBuildingGEO",data = new_data_obj, headers=header)
