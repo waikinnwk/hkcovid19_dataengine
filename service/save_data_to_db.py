@@ -128,7 +128,9 @@ def update_building_geo():
                         break
                     except:
                         print('DB except')    
-                time.sleep(1)
+                t_end = time.time() + 60
+                while time.time() < t_end:
+                    print('waiting')
             except:
                 print('Request except')   
         else:
