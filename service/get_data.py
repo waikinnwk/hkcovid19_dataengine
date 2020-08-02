@@ -6,6 +6,7 @@ from data_obj.building_geo import *
 from datetime import datetime, timedelta
 from db import db
 from sqlalchemy import *
+from util.utils import convert_building_name_to_geo
 
 def get_case_group_by_age_from_db():
     cases = Case.query.order_by(Case.case_no).all()
