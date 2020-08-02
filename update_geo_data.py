@@ -1,4 +1,6 @@
+
 from app import db
+
 from data_obj.building_geo import *
 from data_obj.related_building import *
 import requests

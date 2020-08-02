@@ -9,6 +9,7 @@ from data_obj.case import *
 from data_obj.day_summary import *
 from data_obj.related_building import *
 from data_obj.building_geo import *
+from util.utils import convert_building_name_to_geo
 
 def refresh_data():
     print("refresh_data start :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
@@ -108,7 +109,7 @@ def update_building_geo():
     data_obj = []
     related_buildings = RelatedBuilding.query.order_by(RelatedBuilding.district).all()
     for related_building in related_buildings:
-        trim_building_name = related_building.building_name.upper().replace("(NON-RESIDENTIAL)", "").strip()
+        trim_building_name = convert_building_name_to_geo(related_building.building_name)
         building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == related_building.district).filter(BuildingGeoInfo.building_name == trim_building_name).first()
         if not building_geo_from_db :
             try:
