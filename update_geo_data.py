@@ -1,4 +1,3 @@
-
 from app import db
 
 from data_obj.building_geo import *
@@ -30,20 +29,12 @@ def update_building_geo_sc():
                 response = requests.get(url_GetXY_Pre+trim_building_name+","+related_building.district+url_GetXY_Post,data = data_obj, headers=header)
                 json_data = response.json()
                 for data in json_data:
-                    new_building_geo = BuildingGeoInfo(
-                        district=related_building.district,
-                        building_name = trim_building_name,
-                        lat = data["lat"],
-                        lon = data["lon"]
-                    )
-                    try:
-                        db.session.add(new_building_geo)
-                        db.session.commit()
-                        inserted+=1
-                        print('GEO inserted')    
-                        break
-                    except:
-                        print('DB except')    
+                    new_data_obj = {"district":related_building.district,
+                        "building_name":trim_building_name,
+                        "lat": data["lat"],
+                        "lon": data["lon"]}
+                    response = requests.post("https://kinhkcovid19dataengine.herokuapp.com/saveBuildingGEO",data = new_data_obj, headers=header)
+
                 time.sleep(1)
             except:
                 print('Request except')   
@@ -53,3 +44,4 @@ def update_building_geo_sc():
     print("update_building_geo end :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))  
 
 update_building_geo_sc()
+

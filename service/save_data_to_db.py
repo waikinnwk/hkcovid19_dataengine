@@ -97,6 +97,21 @@ def refresh_data():
 
     print("refresh_data end :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
 
+def save_building_geo(district_input,building_name_input,lat_input,lon_input):
+    building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == district_input).filter(BuildingGeoInfo.building_name == building_name_input).first()
+    if not building_geo_from_db :
+        new_building_geo = BuildingGeoInfo(
+            district=district_input,
+            building_name = building_name_input,
+            lat = lat_input,
+            lon = lon_input
+        )
+        try:
+            db.session.add(new_building_geo)
+            db.session.commit()
+            print('GEO inserted')    
+        except:
+            print('DB except')   
 
 def update_building_geo():
     print("update_building_geo start :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))  
