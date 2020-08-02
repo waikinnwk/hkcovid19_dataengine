@@ -123,7 +123,7 @@ def update_building_geo():
                 try:
                     db.session.add(new_building_geo)
                     db.session.commit()
-                    time.sleep(2)
+                    time.sleep(1)
                     break
                 except:
                     print('Error')    
