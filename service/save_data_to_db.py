@@ -124,13 +124,13 @@ def update_building_geo():
                     try:
                         db.session.add(new_building_geo)
                         db.session.commit()
+                        print('GEO inserted')    
                         break
                     except:
-                        db.session.rollback()
-                        print('DB Error')    
+                        print('DB except')    
                 time.sleep(1)
             except:
-                print('Error')   
+                print('Request except')   
         else:
             print('Skip record')
     print("update_building_geo end :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))  
