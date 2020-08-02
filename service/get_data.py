@@ -153,6 +153,15 @@ def get_latest_related_building_from_db():
         o["last_date_of_residence_of_the_case"] = related_building.last_date_of_residence_of_the_case
         o["related_case"] = related_building.related_case
         o["no_of_case"] = related_building.no_of_case
+
+        trim_building_name = convert_building_name_to_geo(related_building.building_name)
+        building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == related_building.district).filter(BuildingGeoInfo.building_name == trim_building_name).first()
+        if not building_geo_from_db:
+            o["lat"] = building_geo_from_db.lat
+            o["lon"] = building_geo_from_db.lon
+        else:
+            o["lat"] = "NULL"
+            o["lon"] = "NULL"
         result.append(o) 
     return result
 
