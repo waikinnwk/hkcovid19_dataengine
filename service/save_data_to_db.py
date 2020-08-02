@@ -124,10 +124,11 @@ def update_building_geo():
                     try:
                         db.session.add(new_building_geo)
                         db.session.commit()
-                        time.sleep(1)
                         break
                     except:
+                        db.session.rollback()
                         print('DB Error')    
+                time.sleep(1)
             except:
                 print('Error')   
         else:
