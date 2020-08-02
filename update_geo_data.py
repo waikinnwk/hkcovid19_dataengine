@@ -31,10 +31,14 @@ def update_building_geo_sc():
                     "lon": data["lon"]}
                 response = requests.post("https://kinhkcovid19dataengine.herokuapp.com/saveBuildingGEO",data = new_data_obj, headers=header)
                 print('Updated')   
+                inserted+=1
                 break
         except:
              print('Request except')   
-        time.sleep(1)
+        if inserted == 200:
+            break
+        else
+            time.sleep(1)
     print("GEO Data added :" + str(inserted))
     print("update_building_geo end :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))  
 
