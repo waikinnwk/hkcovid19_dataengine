@@ -8,7 +8,7 @@ from service.get_data_from_gov import *
 from data_obj.case import *
 from data_obj.day_summary import *
 from data_obj.related_building import *
-
+from data_obj.building_geo import *
 
 def refresh_data():
     print("refresh_data start :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
@@ -105,11 +105,12 @@ def update_building_geo():
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36",
     "X-Requested-With": "XMLHttpRequest"
     }    
+    data_obj = []
     related_buildings = RelatedBuilding.query.order_by(RelatedBuilding.district).all()
     for related_building in related_buildings:
         trim_building_name = related_building.building_name.upper().replace("(NON-RESIDENTIAL)", "").strip()
         building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == related_building.district).filter(BuildingGeoInfo.building_name == trim_building_name).first()
-        if(related_building_from_db is None):
+        if(building_geo_from_db is None):
             response = requests.get(url_GetXY_Pre+trim_building_name+","+related_building.district+url_GetXY_Post,data = data_obj, headers=header)
             json_data = response.json()
             for data in json_data:

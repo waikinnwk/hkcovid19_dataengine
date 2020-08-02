@@ -2,6 +2,7 @@ import json
 from data_obj.case import *
 from data_obj.day_summary import *
 from data_obj.related_building import *
+from data_obj.building_geo import *
 from datetime import datetime, timedelta
 from db import db
 from sqlalchemy import *
@@ -166,3 +167,15 @@ def get_latest_district_data_from_db():
         result.append(o) 
     return result
 
+
+def get_building_geo_data_from_db():
+    geo_data_arr = BuildingGeoInfo.query.order_by(BuildingGeoInfo.district).all()
+    result = []
+    for geo_data in geo_data_arr:
+        o = {}
+        o["district"] = geo_data.district
+        o["building_name"] = geo_data.building_name
+        o["lat"] = geo_data.lat
+        o["lon"] = geo_data.lon
+        result.append(o) 
+    return result

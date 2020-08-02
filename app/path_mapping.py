@@ -50,4 +50,9 @@ def get_related_budilings():
 @app.route('/getDistrictData', methods=['POST'])
 def get_district_data():
     return jsonify(get_latest_district_data_from_db())
+
+
+@app.route('/getBuildingGeoData')
+def get_building_geo_data():
+    return jsonify(get_building_geo_data_from_db())
     
