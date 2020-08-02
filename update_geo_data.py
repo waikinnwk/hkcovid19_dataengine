@@ -30,6 +30,7 @@ def update_building_geo_sc():
                     "lat": data["lat"],
                     "lon": data["lon"]}
                 response = requests.post("https://kinhkcovid19dataengine.herokuapp.com/saveBuildingGEO",data = new_data_obj, headers=header)
+                print('Updated')   
                 break
         except:
              print('Request except')   
