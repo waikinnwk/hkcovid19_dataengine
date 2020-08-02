@@ -157,7 +157,7 @@ def get_latest_related_building_from_db():
 
         trim_building_name = convert_building_name_to_geo(related_building.building_name)
         building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == related_building.district).filter(BuildingGeoInfo.building_name == trim_building_name).first()
-        if not building_geo_from_db:
+        if building_geo_from_db is not None:
             o["lat"] = building_geo_from_db.lat
             o["lon"] = building_geo_from_db.lon
         else:
