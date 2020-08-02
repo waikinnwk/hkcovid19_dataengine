@@ -11,8 +11,8 @@ else:
 from flask import url_for, request
 import requests
 
-url = "http://localhost:"+str(port)+"/updateBuildingGEO"
-
+#url = "http://localhost:"+str(port)+"/updateBuildingGEO"
+url = "https://kinhkcovid19dataengine.herokuapp.com/updateBuildingGEO"
 data_obj = {}
 response = requests.get(url,data = data_obj)
 json_data = response.json()
