@@ -111,21 +111,26 @@ def update_building_geo():
         trim_building_name = related_building.building_name.upper().replace("(NON-RESIDENTIAL)", "").strip()
         building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == related_building.district).filter(BuildingGeoInfo.building_name == trim_building_name).first()
         if(building_geo_from_db is None):
-            response = requests.get(url_GetXY_Pre+trim_building_name+","+related_building.district+url_GetXY_Post,data = data_obj, headers=header)
-            json_data = response.json()
-            for data in json_data:
-                new_building_geo = BuildingGeoInfo(
-                    district=related_building.district,
-                    building_name = trim_building_name,
-                    lat = data["lat"],
-                    lon = data["lon"]
-                )
-                try:
-                    db.session.add(new_building_geo)
-                    db.session.commit()
-                    time.sleep(1)
-                    break
-                except:
-                    print('Error')    
+            try:
+                response = requests.get(url_GetXY_Pre+trim_building_name+","+related_building.district+url_GetXY_Post,data = data_obj, headers=header)
+                json_data = response.json()
+                for data in json_data:
+                    new_building_geo = BuildingGeoInfo(
+                        district=related_building.district,
+                        building_name = trim_building_name,
+                        lat = data["lat"],
+                        lon = data["lon"]
+                    )
+                    try:
+                        db.session.add(new_building_geo)
+                        db.session.commit()
+                        time.sleep(1)
+                        break
+                    except:
+                        print('DB Error')    
+             except:
+                print('Error')   
+        else:
+            print('Skip record')
     print("update_building_geo end :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))  
                              
