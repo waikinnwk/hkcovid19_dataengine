@@ -37,7 +37,7 @@ def update_building_geo_sc():
              print('Request except')   
         if inserted == 150:
             break
-        else
+        else:
             time.sleep(1)
     print("GEO Data added :" + str(inserted))
     print("update_building_geo end :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))  
