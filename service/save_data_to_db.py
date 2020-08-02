@@ -128,7 +128,7 @@ def update_building_geo():
                         break
                     except:
                         print('DB Error')    
-             except:
+            except:
                 print('Error')   
         else:
             print('Skip record')
