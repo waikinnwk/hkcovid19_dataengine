@@ -35,7 +35,7 @@ def update_building_geo_sc():
                 break
         except:
              print('Request except')   
-        if inserted == 200:
+        if inserted == 150:
             break
         else
             time.sleep(1)
