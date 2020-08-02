@@ -110,7 +110,7 @@ def update_building_geo():
     for related_building in related_buildings:
         trim_building_name = related_building.building_name.upper().replace("(NON-RESIDENTIAL)", "").strip()
         building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == related_building.district).filter(BuildingGeoInfo.building_name == trim_building_name).first()
-        if(building_geo_from_db is None):
+        if not building_geo_from_db :
             try:
                 response = requests.get(url_GetXY_Pre+trim_building_name+","+related_building.district+url_GetXY_Post,data = data_obj, headers=header)
                 json_data = response.json()
