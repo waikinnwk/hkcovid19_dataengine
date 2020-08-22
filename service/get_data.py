@@ -1,4 +1,5 @@
 import json
+import math
 from data_obj.case import *
 from data_obj.day_summary import *
 from data_obj.related_building import *
@@ -7,6 +8,13 @@ from datetime import datetime, timedelta
 from db import db
 from sqlalchemy import *
 from util.utils import convert_building_name_to_geo
+
+
+def get_case_no_of_page(record_per_page):
+    rows = db.session.query(func.count(Case.case_no)).scalar()
+    page = math. ceil(rows / record_per_page)
+    return page
+
 
 def get_case_by_page(page,record_per_page):
     start_record = page * record_per_page +1

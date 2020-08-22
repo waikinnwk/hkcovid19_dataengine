@@ -27,9 +27,18 @@ def save_buidling_geo():
     result = {"result": "OK","data": ""}
     return jsonify(result)
 
+@app.route('/getNoOfPage', methods=['POST'])
+def get_no_of_page():
+    record_per_page = int(request.values.get("record_per_page"))
+    page = get_case_no_of_page(record_per_page)
+    result = {}
+    result["no_of_page"] = page
+    return jsonify(result)  
+    
+
 @app.route('/getCasesByPage', methods=['POST'])
 def get_cases_by_page():     
-    page = int(request.values.get("page"))
+    page = int(request.values.get("page")) -1
     record_per_page = int(request.values.get("record_per_page"))
     result = get_case_by_page(page,record_per_page)
     return jsonify(result)    
