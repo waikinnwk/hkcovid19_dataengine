@@ -99,7 +99,7 @@ def refresh_data():
 
 def save_building_geo(district_input,building_name_input,lat_input,lon_input):
     building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == district_input).filter(BuildingGeoInfo.building_name == building_name_input).first()
-    if not building_geo_from_db :
+    if building_geo_from_db is None:
         new_building_geo = BuildingGeoInfo(
             district=district_input,
             building_name = building_name_input,
@@ -112,6 +112,8 @@ def save_building_geo(district_input,building_name_input,lat_input,lon_input):
             print('GEO inserted')    
         except:
             print('DB except')   
+    else:
+        print('GEO exist skip')
 
 def update_building_geo():
     print("update_building_geo start :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))  
@@ -126,7 +128,7 @@ def update_building_geo():
     for related_building in related_buildings:
         trim_building_name = convert_building_name_to_geo(related_building.building_name)
         building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == related_building.district).filter(BuildingGeoInfo.building_name == trim_building_name).first()
-        if not building_geo_from_db :
+        if building_geo_from_db is None:
             try:
                 response = requests.get(url_GetXY_Pre+trim_building_name+","+related_building.district+url_GetXY_Post,data = data_obj, headers=header)
                 json_data = response.json()

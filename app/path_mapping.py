@@ -1,6 +1,7 @@
 from flask import jsonify
 from app import app
 from service.save_data_to_db import refresh_data,update_building_geo,save_building_geo
+from service.save_data_to_db_local import get_building_geo_to_local
 from service.get_data import *
 from flask import request
 
@@ -68,3 +69,9 @@ def get_building_geo_data():
 def get_building_without_geo_data():
     return jsonify(get_building_without_geo_data_from_db())
     
+
+@app.route('/refreshGeoDataFromHerokuToLocal')
+def refresh_geo_data_to_local():    
+    get_building_geo_to_local()
+    result = {"result": "OK","data": ""}
+    return jsonify(result)
