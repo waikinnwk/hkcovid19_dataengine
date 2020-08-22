@@ -8,6 +8,34 @@ from db import db
 from sqlalchemy import *
 from util.utils import convert_building_name_to_geo
 
+def get_case_by_page(page,record_per_page):
+    start_record = page * record_per_page +1
+    end_record = (page+1) * record_per_page
+    count = 0
+    cases = Case.query.order_by(Case.case_no.desc()).all()
+    result = []
+    for case in cases:
+        count+=1
+        if count >= start_record and count <=end_record:
+            o = {}
+            o["case_no"] = case.case_no
+            o["report_date"] = case.report_date.strftime("%d/%m/%Y")
+            o["onset_date"] = case.onset_date
+            o["gender"] = case.gender
+            o["age"] = case.age
+            o["admitted_hospital"] = case.admitted_hospital
+            o["hospital_status"] = case.hospital_status
+            o["is_hk_resident"] = case.is_hk_resident
+            o["case_classification"] = case.case_classification
+            o["status"] = case.status
+            result.append(o)
+        elif count > end_record:
+            break
+
+    return result
+
+
+
 def get_case_group_by_age_from_db():
     cases = Case.query.order_by(Case.case_no).all()
     case_label = ["below 18","18-30","31-40","41-50","51-65","over 65"]
