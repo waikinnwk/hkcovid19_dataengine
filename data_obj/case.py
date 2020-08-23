@@ -16,7 +16,7 @@ class Case(db.Model):
     def __repr__(self):
         return '<Case %exir>' %self.id
 
-    def __to_dictionary__(self):
+    def to_dictionary(self):
         o = {}
         o["case_no"] = self.case_no
         o["report_date"] = self.report_date.strftime("%d/%m/%Y")

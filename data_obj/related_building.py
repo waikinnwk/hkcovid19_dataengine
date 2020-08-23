@@ -15,7 +15,7 @@ class RelatedBuilding(db.Model):
         return '<Related Building %exir>' %self.building_name
 
 
-    def __to_dictionary__(self):
+    def to_dictionary(self):
         o = {}
         o["as_of_date"] = self.as_of_date.strftime("%d/%m/%Y")
         o["district"] = self.district

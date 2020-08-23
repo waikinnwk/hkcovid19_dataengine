@@ -13,7 +13,7 @@ class BuildingGeoInfo(db.Model):
         return '<BuildingGeoInfo %exir>' %self.building_name
 
     
-    def __to_dictionary__(self):
+    def to_dictionary(self):
         o = {}
         o["district"] = self.district
         o["building_name"] = self.building_name

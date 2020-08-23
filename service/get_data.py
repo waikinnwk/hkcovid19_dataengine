@@ -25,7 +25,7 @@ def get_case_by_page(page,record_per_page):
     for case in cases:
         count+=1
         if count >= start_record and count <=end_record:
-            result.append(case.__to_dictionary__())
+            result.append(case.to_dictionary())
         elif count > end_record:
             break
 
@@ -116,7 +116,7 @@ def get_case_by_symptomatic_from_db():
 def get_latest_summary_from_db(): 
 
     daysummary = DaySummary.query.order_by(DaySummary.as_of_date.desc()).first()
-    result = daysummary.__to_dictionary__()
+    result = daysummary.to_dictionary()
 
     d_14 = daysummary.as_of_date - timedelta(days=14)
     records = db.session.query(Case.report_date, func.count(Case.report_date).label('count')).filter(Case.report_date.between(d_14, daysummary.as_of_date)).group_by(Case.report_date).order_by(Case.report_date.desc())
@@ -144,7 +144,7 @@ def get_summary_for_past_14_from_db():
     daysummarys = DaySummary.query.filter(DaySummary.as_of_date <= today).filter(DaySummary.as_of_date >= d_14).order_by(DaySummary.as_of_date)
     result = []
     for daysummary in daysummarys:
-        result.append(daysummary.__to_dictionary__()) 
+        result.append(daysummary.to_dictionary()) 
     return result
 
 
@@ -153,7 +153,7 @@ def get_latest_related_building_from_db():
     related_buildings = RelatedBuilding.query.filter(RelatedBuilding.as_of_date == today).order_by(RelatedBuilding.district)
     result = []
     for related_building in related_buildings:
-        o = related_building.__to_dictionary__()
+        o = related_building.to_dictionary()
 
         trim_building_name = convert_building_name_to_geo(related_building.building_name)
         building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == related_building.district).filter(BuildingGeoInfo.building_name == trim_building_name).first()
@@ -182,7 +182,7 @@ def get_building_geo_data_from_db():
     geo_data_arr = BuildingGeoInfo.query.order_by(BuildingGeoInfo.district).all()
     result = []
     for geo_data in geo_data_arr:
-        result.append(geo_data.__to_dictionary__()) 
+        result.append(geo_data.to_dictionary()) 
     return result
 
 def get_building_without_geo_data_from_db():

@@ -18,7 +18,7 @@ class DaySummary(db.Model):
         return '<Case Summary %exir>' %self.as_of_date
     
 
-    def __to_dictionary__(self):
+    def to_dictionary(self):
         o = {}
         o["as_of_date"] = self.as_of_date.strftime("%d/%m/%Y")
         o["no_of_confirmed_cases"] = self.no_of_confirmed_cases
