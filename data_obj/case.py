@@ -1,4 +1,5 @@
 from db import db
+from datetime import datetime
 
 class Case(db.Model):
     __tablename__ = 'Case'
@@ -14,3 +15,17 @@ class Case(db.Model):
     status =  db.Column(db.String(50))
     def __repr__(self):
         return '<Case %exir>' %self.id
+
+    def __to_dictionary__(self):
+        o = {}
+        o["case_no"] = self.case_no
+        o["report_date"] = self.report_date.strftime("%d/%m/%Y")
+        o["onset_date"] = self.onset_date
+        o["gender"] = self.gender
+        o["age"] = self.age
+        o["admitted_hospital"] = self.admitted_hospital
+        o["hospital_status"] = self.hospital_status
+        o["is_hk_resident"] = self.is_hk_resident
+        o["case_classification"] = self.case_classification
+        o["status"] = self.status    
+        return o   

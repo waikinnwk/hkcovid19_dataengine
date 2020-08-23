@@ -1,4 +1,5 @@
 from db import db
+from datetime import datetime
 
 class RelatedBuilding(db.Model):
     __tablename__ = 'RelatedBuilding'
@@ -12,3 +13,14 @@ class RelatedBuilding(db.Model):
 
     def __repr__(self):
         return '<Related Building %exir>' %self.building_name
+
+
+    def __to_dictionary__(self):
+        o = {}
+        o["as_of_date"] = self.as_of_date.strftime("%d/%m/%Y")
+        o["district"] = self.district
+        o["building_name"] = self.building_name
+        o["last_date_of_residence_of_the_case"] = self.last_date_of_residence_of_the_case
+        o["related_case"] = self.related_case
+        o["no_of_case"] = self.no_of_case
+        return o

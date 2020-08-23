@@ -25,18 +25,7 @@ def get_case_by_page(page,record_per_page):
     for case in cases:
         count+=1
         if count >= start_record and count <=end_record:
-            o = {}
-            o["case_no"] = case.case_no
-            o["report_date"] = case.report_date.strftime("%d/%m/%Y")
-            o["onset_date"] = case.onset_date
-            o["gender"] = case.gender
-            o["age"] = case.age
-            o["admitted_hospital"] = case.admitted_hospital
-            o["hospital_status"] = case.hospital_status
-            o["is_hk_resident"] = case.is_hk_resident
-            o["case_classification"] = case.case_classification
-            o["status"] = case.status
-            result.append(o)
+            result.append(case.__to_dictionary__())
         elif count > end_record:
             break
 
@@ -127,16 +116,7 @@ def get_case_by_symptomatic_from_db():
 def get_latest_summary_from_db(): 
 
     daysummary = DaySummary.query.order_by(DaySummary.as_of_date.desc()).first()
-    result = {}
-    result["as_of_date"] = daysummary.as_of_date.strftime("%d/%m/%Y")
-    result["no_of_confirmed_cases"] = daysummary.no_of_confirmed_cases
-    result["no_of_ruled_out_cases"] = daysummary.no_of_ruled_out_cases
-    result["no_of_cases_still_hospitalised_for_investigation"] = daysummary.no_of_cases_still_hospitalised_for_investigation
-    result["no_of_cases_fulfilling_the_reporting_criteria"] = daysummary.no_of_cases_fulfilling_the_reporting_criteria
-    result["no_of_death_cases"] = daysummary.no_of_death_cases
-    result["no_of_discharge_cases"] = daysummary.no_of_discharge_cases
-    result["no_of_probable_cases"] = daysummary.no_of_probable_cases
-    result["no_of_hospitalised_cases_in_critical_condition"] = daysummary.no_of_hospitalised_cases_in_critical_condition
+    result = daysummary.__to_dictionary__()
 
     d_14 = daysummary.as_of_date - timedelta(days=14)
     records = db.session.query(Case.report_date, func.count(Case.report_date).label('count')).filter(Case.report_date.between(d_14, daysummary.as_of_date)).group_by(Case.report_date).order_by(Case.report_date.desc())
@@ -164,17 +144,7 @@ def get_summary_for_past_14_from_db():
     daysummarys = DaySummary.query.filter(DaySummary.as_of_date <= today).filter(DaySummary.as_of_date >= d_14).order_by(DaySummary.as_of_date)
     result = []
     for daysummary in daysummarys:
-        o = {}
-        o["as_of_date"] = daysummary.as_of_date.strftime("%d/%m/%Y")
-        o["no_of_confirmed_cases"] = daysummary.no_of_confirmed_cases
-        o["no_of_ruled_out_cases"] = daysummary.no_of_ruled_out_cases
-        o["no_of_cases_still_hospitalised_for_investigation"] = daysummary.no_of_cases_still_hospitalised_for_investigation
-        o["no_of_cases_fulfilling_the_reporting_criteria"] = daysummary.no_of_cases_fulfilling_the_reporting_criteria
-        o["no_of_death_cases"] = daysummary.no_of_death_cases
-        o["no_of_discharge_cases"] = daysummary.no_of_discharge_cases
-        o["no_of_probable_cases"] = daysummary.no_of_probable_cases
-        o["no_of_hospitalised_cases_in_critical_condition"] = daysummary.no_of_hospitalised_cases_in_critical_condition
-        result.append(o) 
+        result.append(daysummary.__to_dictionary__()) 
     return result
 
 
@@ -183,13 +153,7 @@ def get_latest_related_building_from_db():
     related_buildings = RelatedBuilding.query.filter(RelatedBuilding.as_of_date == today).order_by(RelatedBuilding.district)
     result = []
     for related_building in related_buildings:
-        o = {}
-        o["as_of_date"] = related_building.as_of_date.strftime("%d/%m/%Y")
-        o["district"] = related_building.district
-        o["building_name"] = related_building.building_name
-        o["last_date_of_residence_of_the_case"] = related_building.last_date_of_residence_of_the_case
-        o["related_case"] = related_building.related_case
-        o["no_of_case"] = related_building.no_of_case
+        o = related_building.__to_dictionary__()
 
         trim_building_name = convert_building_name_to_geo(related_building.building_name)
         building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == related_building.district).filter(BuildingGeoInfo.building_name == trim_building_name).first()
@@ -218,12 +182,7 @@ def get_building_geo_data_from_db():
     geo_data_arr = BuildingGeoInfo.query.order_by(BuildingGeoInfo.district).all()
     result = []
     for geo_data in geo_data_arr:
-        o = {}
-        o["district"] = geo_data.district
-        o["building_name"] = geo_data.building_name
-        o["lat"] = geo_data.lat
-        o["lon"] = geo_data.lon
-        result.append(o) 
+        result.append(geo_data.__to_dictionary__()) 
     return result
 
 def get_building_without_geo_data_from_db():

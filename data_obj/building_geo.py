@@ -11,3 +11,12 @@ class BuildingGeoInfo(db.Model):
 
     def __repr__(self):
         return '<BuildingGeoInfo %exir>' %self.building_name
+
+    
+    def __to_dictionary__(self):
+        o = {}
+        o["district"] = self.district
+        o["building_name"] = self.building_name
+        o["lat"] = self.lat
+        o["lon"] = self.lon
+        return o
