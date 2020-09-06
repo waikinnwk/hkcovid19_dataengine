@@ -64,6 +64,11 @@ def update_building_geo_sc():
                         break
                 else:
                     print("No result from Open Street Map & Google " + building_name +","+district)
+                    new_data_obj = {"district":district,
+                    "building_name":building_name}
+                    response = requests.post(backend_url + "/saveEmptyBuildingGEO",data = new_data_obj, headers=header)
+                    inserted+=1
+                    print('Updated Empty GEO:' + str(inserted))  
 
         except:
              print('Request except')   

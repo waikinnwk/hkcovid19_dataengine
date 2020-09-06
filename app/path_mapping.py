@@ -1,6 +1,6 @@
 from flask import jsonify
 from app import app
-from service.save_data_to_db import refresh_data,update_building_geo,save_building_geo
+from service.save_data_to_db import refresh_data,update_building_geo,save_building_geo,save_empty_building_geo
 from service.save_data_to_db_local import get_building_geo_to_local
 from service.get_data import *
 from flask import request
@@ -26,6 +26,14 @@ def save_buidling_geo():
     save_building_geo(district,building_name,lat,lon)
     result = {"result": "OK","data": ""}
     return jsonify(result)
+
+@app.route('/saveEmptyBuildingGEO', methods=['POST'])
+def save_empty_building_geo():
+    district = request.values.get("district")
+    building_name = request.values.get("building_name")
+    save_empty_building_geo(district,building_name)
+    result = {"result": "OK","data": ""}
+    return jsonify(result)    
 
 @app.route('/getNoOfPage', methods=['POST'])
 def get_no_of_page():
@@ -80,6 +88,12 @@ def get_district_data():
 @app.route('/getBuildingGeoData')
 def get_building_geo_data():
     return jsonify(get_building_geo_data_from_db())
+
+
+@app.route('/getBuildingWithEmptyGeoData')
+def get_building_with_empty_geo_data():
+    return jsonify(get_building_empyt_geo_data_from_db())
+
 
 @app.route('/getBuildingWithoutGeoData')
 def get_building_without_geo_data():

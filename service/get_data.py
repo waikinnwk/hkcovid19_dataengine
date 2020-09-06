@@ -179,11 +179,18 @@ def get_latest_district_data_from_db():
 
 
 def get_building_geo_data_from_db():
-    geo_data_arr = BuildingGeoInfo.query.order_by(BuildingGeoInfo.district).all()
+    geo_data_arr = BuildingGeoInfo.query.filter(BuildingGeoInfo.lat != "").filter(BuildingGeoInfo.lon != "").order_by(BuildingGeoInfo.district).all()
     result = []
     for geo_data in geo_data_arr:
         result.append(geo_data.to_dictionary()) 
     return result
+
+def get_building_empyt_geo_data_from_db():
+    geo_data_arr = BuildingGeoInfo.query.filter(BuildingGeoInfo.lat == "").filter(BuildingGeoInfo.lon == "").order_by(BuildingGeoInfo.district).all()
+    result = []
+    for geo_data in geo_data_arr:
+        result.append(geo_data.to_dictionary()) 
+    return result    
 
 def get_building_without_geo_data_from_db():
     related_buildings = RelatedBuilding.query.filter(

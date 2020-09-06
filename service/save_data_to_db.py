@@ -153,3 +153,21 @@ def update_building_geo():
             print('Skip record')
     print("update_building_geo end :" + time.strftime("%A, %d. %B %Y %I:%M:%S %p"))  
                              
+
+def save_empty_building_geo(district_input,building_name_input):
+    building_geo_from_db = BuildingGeoInfo.query.filter(BuildingGeoInfo.district == district_input).filter(BuildingGeoInfo.building_name == building_name_input).first()
+    if building_geo_from_db is None:
+        new_building_geo = BuildingGeoInfo(
+            district=district_input,
+            building_name = building_name_input,
+            lat = "",
+            lon = ""
+        )
+        try:
+            db.session.add(new_building_geo)
+            db.session.commit()
+            print('Empty GEO inserted')    
+        except:
+            print('DB except')   
+    else:
+        print('GEO exist skip')
