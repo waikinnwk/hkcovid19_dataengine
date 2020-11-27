@@ -63,7 +63,7 @@ def get_caseno_by_month_from_db():
     total_local_case = 0
     total_import_case = 0
     for case in cases:
-        data_month_gp = str(case.report_date.year) + "-" + str(case.report_date.month)
+        data_month_gp = str(case.report_date.year) + "-" + str(case.report_date.month).rjust(2, '0')
         if(case.case_classification == 'Imported case'):
             if data_month_gp in import_case_data_map:
                 import_case_data_map[data_month_gp] +=1  
